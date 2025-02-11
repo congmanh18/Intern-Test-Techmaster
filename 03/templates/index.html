@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Process AI</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Auto Process AI</h1>
+
+        <label for="model">Chọn mô hình:</label>
+        <select id="model">
+            <option value="deepseek-r1-distill-llama-70b">DeepSeek</option>
+            <option value="gemma2-9b-it">Google</option>
+            <option value="llama-3.3-70b-versatile">Meta</option>
+            <option value="mixtral-8x7b-32768">Mistral</option>
+        </select>
+
+        <button onclick="startAutoProcess()">🚀 Bắt đầu xử lý</button>
+
+        <div id="response-container">
+            <h3>Kết quả:</h3>
+            <h4>📜 Hội thoại:</h4>
+            <div id="dialogue"></div>
+            <h4>📌 Từ quan trọng:</h4>
+            <div id="important-words"></div>
+            <h4>🌍 Dịch sang tiếng Anh:</h4>
+            <div id="translated-words"></div>
+        </div>
+    </div>
+
+    <script>
+        function startAutoProcess() {
+            const model = document.getElementById("model").value;
+            document.getElementById("dialogue").innerHTML = "⏳ Đang xử lý...";
+            document.getElementById("important-words").innerHTML = "";
+            document.getElementById("translated-words").innerHTML = "";
+
+            fetch("/auto-process", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ model: model })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById("dialogue").innerHTML = `<p style='color: red;'>❌ ${data.error}</p>`;
+                } else {
+                    document.getElementById("dialogue").innerHTML = marked.parse(data.Dialogue);
+                    document.getElementById("important-words").innerHTML = marked.parse(data.ImportantWords);
+                    document.getElementById("translated-words").innerHTML = marked.parse(data.TranslatedWords);
+                }
+            })
+            .catch(error => {
+                document.getElementById("dialogue").innerHTML = "<p style='color: red;'>❌ Lỗi kết nối API</p>";
+            });
+        }
+    </script>
+</body>
+</html>
