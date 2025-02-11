@@ -15,12 +15,7 @@
 
 ---
 
-## Giới Thiệu
-Đây là bài thi thực tập sinh Golang tại Techmaster. Dự án bao gồm các thành phần cơ bản để xây dựng một ứng dụng backend với Golang, PostgreSQL và Docker.
-
----
-
-## Kiến trúc thư mục
+## 📂 Cấu trúc thư mục
 Dự án được tổ chức với cấu trúc sau:
 
 ```
@@ -150,7 +145,6 @@ Sau khi triển khai thành công, ứng dụng sẽ cung cấp giao diện tư�
 ### **Tạo hội thoại tự động**
 Khi người dùng khởi động quá trình xử lý, API sẽ sử dụng mô hình AI để tạo ra hội thoại mẫu, dựa trên đề bài. Dữ liệu này được lưu trữ trong hệ thống và có thể được truy xuất lại bất cứ lúc nào.
 
-📸 **Hình ảnh minh họa:**  
 ![Giao diện API xử lý hội thoại](images/api-auto-process.jpg)
 
 ---
@@ -158,7 +152,6 @@ Khi người dùng khởi động quá trình xử lý, API sẽ sử dụng mô
 ### **Lưu trữ dữ liệu vào cơ sở dữ liệu**
 Tất cả hội thoại được sinh ra sẽ được lưu trữ trong PostgreSQL, giúp dễ dàng truy xuất và quản lý.
 
-📸 **Hình ảnh minh họa:**  
 ![Dữ liệu lưu trong database](images/saved-data-in-database.jpg)
 
 ---
@@ -166,11 +159,12 @@ Tất cả hội thoại được sinh ra sẽ được lưu trữ trong Postgre
 ### **Truy xuất dữ liệu từ cơ sở dữ liệu**
 Ứng dụng hỗ trợ API để truy xuất hội thoại đã lưu từ database. Điều này giúp dễ dàng kiểm tra, đánh giá và tiếp tục xử lý nội dung.
 
-📸 **Hình ảnh minh họa:**  
 ![API truy xuất dữ liệu từ database](images/api-read-from-database.jpg)
 
 ---
-### **Video Demo**
+### 📺 **Video Demo YouTube**
+## 🔗 **Xem Ngay**: [![Watch the video](https://img.youtube.com/vi/rUVLZx3DSCw/maxresdefault.jpg)](https://youtu.be/rUVLZx3DSCw?si=oc1B_t-wG3pGp6Jx)  
+🔗 **Link video**: [https://youtu.be/rUVLZx3DSCw?si=oc1B_t-wG3pGp6Jx](https://youtu.be/rUVLZx3DSCw?si=oc1B_t-wG3pGp6Jx)  
 
-
+---
 
