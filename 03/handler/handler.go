@@ -8,6 +8,8 @@ import (
 
 type Handler interface {
 	AutoProcessHandler(ctx iris.Context)
+	GetDialogAndWords(ctx iris.Context)
+	GetAllIDDialogs(ctx iris.Context)
 }
 
 type handlerImpl struct {

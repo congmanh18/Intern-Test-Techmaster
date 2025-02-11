@@ -24,10 +24,11 @@ func (w *wordDialogImpl) AddWordDialog(ctx context.Context, dialogID string, wor
 	}
 
 	// Thêm hoặc bỏ qua nếu đã tồn tại
-	err := w.DB.Executor.Clauses(clause.OnConflict{
-		Columns:   []clause.Column{{Name: "dialog_id"}, {Name: "word_id"}},
-		DoNothing: true,
-	}).Create(&wordDialog).Error
+	err := w.DB.Executor.WithContext(ctx).
+		Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "dialog_id"}, {Name: "word_id"}},
+			DoNothing: true,
+		}).Create(&wordDialog).Error
 
 	return err
 }

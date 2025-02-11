@@ -11,16 +11,15 @@
     <div class="container">
         <h1>Auto Process AI</h1>
 
-        <label for="model">Chọn mô hình:</label>
+        <label for="model">🔍 Chọn mô hình AI:</label>
         <select id="model">
-            <option value="deepseek-r1-distill-llama-70b">DeepSeek</option>
             <option value="gemma2-9b-it">Google</option>
             <option value="llama-3.3-70b-versatile">Meta</option>
             <option value="mixtral-8x7b-32768">Mistral</option>
+            <option value="deepseek-r1-distill-llama-70b">DeepSeek</option>
         </select>
 
         <button onclick="startAutoProcess()">🚀 Bắt đầu xử lý</button>
-
         <div id="response-container">
             <h3>Kết quả:</h3>
             <h4>📜 Hội thoại:</h4>
@@ -30,6 +29,20 @@
             <h4>🌍 Dịch sang tiếng Anh:</h4>
             <div id="translated-words"></div>
         </div>
+        <hr>
+
+        <h2>📜 API: Lấy ID hội thoại</h2>
+        <button onclick="getAllDialogIDs()">📌 Lấy tất cả ID hội thoại</button>
+        <div id="dialog-ids"></div>
+
+        <hr>
+
+        <h2>📜 API: Lấy hội thoại & từ vựng</h2>
+        <label for="dialog-id-input">Nhập ID hội thoại:</label>
+        <input type="text" id="dialog-id-input" placeholder="Nhập ID..." />
+        <button onclick="getDialogAndWords()">📖 Lấy hội thoại</button>
+
+        
     </div>
 
     <script>
@@ -58,6 +71,59 @@
                 document.getElementById("dialogue").innerHTML = "<p style='color: red;'>❌ Lỗi kết nối API</p>";
             });
         }
+
+        function getAllDialogIDs() {
+            document.getElementById("dialog-ids").innerHTML = "⏳ Đang tải...";
+            fetch("/api/dialogs/ids")
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById("dialog-ids").innerHTML = `<p style='color: red;'>❌ ${data.error}</p>`;
+                } else {
+                    document.getElementById("dialog-ids").innerHTML = "<b>Danh sách ID:</b><br>" + data.dialog_ids.join(", ");
+                }
+            })
+            .catch(error => {
+                document.getElementById("dialog-ids").innerHTML = "<p style='color: red;'>❌ Lỗi kết nối API</p>";
+            });
+        }
+
+        function getDialogAndWords() {
+            const dialogID = document.getElementById("dialog-id-input").value.trim();
+            if (!dialogID) {
+                alert("Vui lòng nhập ID hội thoại!");
+                return;
+            }
+
+            document.getElementById("dialogue").innerHTML = "⏳ Đang tải...";
+            document.getElementById("important-words").innerHTML = "";
+            document.getElementById("translated-words").innerHTML = "";
+
+            console.log("Fetching data for dialog ID:", dialogID);
+
+            fetch(`/api/dialogs/${dialogID}`)
+            .then(response => {
+                console.log("Response status:", response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log("Response data:", data);
+                if (data.error) {
+                    document.getElementById("dialogue").innerHTML = `<p style='color: red;'>❌ ${data.error}</p>`;
+                } else {
+                    document.getElementById("dialogue").innerHTML = marked.parse(data.dialog.content || "");
+                    
+                    // Hiển thị từ quan trọng dạng danh sách
+                    const wordsList = data.words.map(word => `<li>${word.content} - <b>${word.translate}</b></li>`).join("\n");
+                    document.getElementById("translated-words").innerHTML = `<ul>${wordsList}</ul>`;
+                }
+            })
+            .catch(error => {
+                console.error("Fetch error:", error);
+                document.getElementById("dialogue").innerHTML = "<p style='color: red;'>❌ Lỗi kết nối API</p>";
+            });
+        }
+
     </script>
 </body>
 </html>

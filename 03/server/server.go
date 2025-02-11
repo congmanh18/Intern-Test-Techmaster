@@ -76,7 +76,8 @@ func Run(confPath string) {
 		ctx.JSON(iris.Map{"response": htmlResponse})
 	})
 
-	// Định nghĩa API endpoint
+	RegisterRoutes(app, handler)
+
 	app.Post("/auto-process", handler.AutoProcessHandler)
 
 	app.RegisterView(iris.HTML("./templates", ".html"))

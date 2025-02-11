@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groq AI Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <!-- Thêm thư viện Markdown -->
+</head>
+<body>
+    <div class="container">
+        <h1>Groq AI Chatbot</h1>
+
+        <label for="prompt">Nhập câu hỏi:</label>
+        <textarea id="prompt" placeholder="Nhập câu hỏi của bạn..." rows="4"></textarea>
+
+        <label for="model">Chọn mô hình:</label>
+        <select id="model">
+            <option value="deepseek-r1-distill-llama-70b">DeepSeek</option>
+            <option value="gemma2-9b-it">Google</option>
+            <option value="llama-3.3-70b-versatile">Meta</option>
+            <option value="mixtral-8x7b-32768">Mistral</option>
+        </select>
+
+        <button onclick="sendPrompt()">🚀 Gửi</button>
+
+        <div id="response-container">
+            <h3>Kết quả:</h3>
+            <div id="response"></div>
+        </div>
+    </div>
+
+    <script>
+        function sendPrompt() {
+            const prompt = document.getElementById("prompt").value.trim();
+            const model = document.getElementById("model").value;
+            const responseDiv = document.getElementById("response");
+
+            if (!prompt) {
+                responseDiv.innerHTML = "<p style='color: red;'>❌ Vui lòng nhập câu hỏi!</p>";
+                return;
+            }
+
+            responseDiv.innerHTML = "<p>⏳ Đang xử lý...</p>";
+
+            fetch("/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: prompt, model: model })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.response) {
+                    responseDiv.innerHTML = marked.parse(data.response);
+                } else {
+                    responseDiv.innerHTML = "<p style='color: red;'>❌ Lỗi: Không có phản hồi từ API</p>";
+                }
+            })
+            .catch(error => {
+                responseDiv.innerHTML = "<p style='color: red;'>❌ Lỗi kết nối API</p>";
+            });
+        }
+    </script>
+</body>
+</html>
